@@ -10,7 +10,14 @@ public record Balance(BigDecimal value) {
 		if (value.signum() == -1)
 			throw new IllegalArgumentException("Balance must not be negative");
 		this.value = value;
+	}
 
+	public Balance add(BigDecimal value_to_add) {
+		return new Balance(value.add(value_to_add));
+	}
+
+	public static Balance valueOf(String value) {
+		return new Balance(new BigDecimal(value));
 	}
 
 }

@@ -1,10 +1,11 @@
 package com.sfeir.bankaccount.business;
 
+import java.math.BigDecimal;
+
 public class Account {
-	private Balance balance;
+	private Balance balance = Balance.INITIAL_BALANCE;
 
 	public Account() {
-		this.balance = Balance.INITIAL_BALANCE;
 	}
 
 	public Account(Balance balance) {
@@ -13,6 +14,10 @@ public class Account {
 
 	public Balance balance() {
 		return this.balance;
+	}
+
+	public void deposit(BigDecimal deposit_value) {
+		balance = balance.add(deposit_value);
 	}
 
 }

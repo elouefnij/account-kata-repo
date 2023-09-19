@@ -11,7 +11,7 @@ public class AccountTest {
 
 	@Test
 	public void should_balance_be_zero_when_new_account_is_created() {
-		Balance expectedBalance = new Balance(BigDecimal.ZERO);
+		Balance expectedBalance = Balance.valueOf("0");
 		//
 		Account account = new Account();
 		//
@@ -20,20 +20,27 @@ public class AccountTest {
 
 	@Test
 	public void should_balance_be_updated_when_new_account_is_created_with_initial_value() {
-		Balance expectedBalance = new Balance(BigDecimal.TEN);
+		Balance expectedBalance = Balance.valueOf("100");
 		//
-		Account account = new Account(expectedBalance);
+		Account account = new Account(Balance.valueOf("100"));
 		//
 		assertEquals(expectedBalance, account.balance());
 	}
 
 	@Test
 	public void should_throw_exception_when_new_account_is_created_with_negative_value() {
-		BigDecimal negative_value = BigDecimal.valueOf(-100.0);
-		//
 		assertThrows("Balance cannot be negative", IllegalArgumentException.class, () -> {
-			new Account(new Balance(negative_value));
+			new Account(Balance.valueOf("-100"));
 		});
 	}
 
+	@Test
+	public void should_balance_be_updated_when_deposit() {
+		Balance expectedBalance = Balance.valueOf("110");
+		Account account = new Account(Balance.valueOf("100"));
+		//
+		account.deposit(BigDecimal.TEN);
+		//
+		assertEquals(expectedBalance, account.balance());
+	}
 }
