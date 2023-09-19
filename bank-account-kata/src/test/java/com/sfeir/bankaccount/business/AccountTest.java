@@ -3,8 +3,6 @@ package com.sfeir.bankaccount.business;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import java.math.BigDecimal;
-
 import org.junit.Test;
 
 public class AccountTest {
@@ -39,8 +37,16 @@ public class AccountTest {
 		Balance expectedBalance = Balance.valueOf("110");
 		Account account = new Account(Balance.valueOf("100"));
 		//
-		account.deposit(BigDecimal.TEN);
+		account.deposit(Amount.valueOf("10"));
 		//
 		assertEquals(expectedBalance, account.balance());
+	}
+
+	@Test
+	public void should_throw_exception_when_negative_deposit() {
+		//
+		assertThrows("Amount must not be negative", IllegalArgumentException.class, () -> {
+			new Account(Balance.valueOf("100")).deposit(Amount.valueOf("-100"));
+		});
 	}
 }

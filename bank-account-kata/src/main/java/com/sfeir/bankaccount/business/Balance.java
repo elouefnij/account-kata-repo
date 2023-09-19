@@ -6,10 +6,9 @@ public record Balance(BigDecimal value) {
 
 	public static final Balance INITIAL_BALANCE = new Balance(BigDecimal.ZERO);
 
-	public Balance(BigDecimal value) {
+	public Balance {
 		if (value.signum() == -1)
 			throw new IllegalArgumentException("Balance must not be negative");
-		this.value = value;
 	}
 
 	public Balance add(BigDecimal value_to_add) {

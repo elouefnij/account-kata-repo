@@ -1,7 +1,5 @@
 package com.sfeir.bankaccount.business;
 
-import java.math.BigDecimal;
-
 public class Account {
 	private Balance balance = Balance.INITIAL_BALANCE;
 
@@ -16,8 +14,8 @@ public class Account {
 		return this.balance;
 	}
 
-	public void deposit(BigDecimal deposit_value) {
-		balance = balance.add(deposit_value);
+	public void deposit(Amount amount) {
+		balance = balance.add(amount.value());
 	}
 
 }
