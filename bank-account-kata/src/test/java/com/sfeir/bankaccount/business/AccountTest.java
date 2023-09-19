@@ -60,4 +60,12 @@ public class AccountTest {
 		assertEquals(expectedBalance, account.balance());
 	}
 
+	@Test
+	public void should_throw_exception_when_negative_withdrawal() {
+		//
+		assertThrows("Amount must not be negative", IllegalArgumentException.class, () -> {
+			new Account(Balance.valueOf("100")).withdraw(Amount.valueOf("-100"));
+		});
+	}
+
 }
