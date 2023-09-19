@@ -51,7 +51,7 @@ public class AccountTest {
 	}
 
 	@Test
-	public void should_balance_be_updated_when_withdrawal_of_positive_amount() {
+	public void should_balance_be_updated_when_withdrawal_of_positive_amount() throws UnauthorizedWithdrawalException {
 		Balance expectedBalance = Balance.valueOf("90");
 		Account account = new Account(Balance.valueOf("100"));
 		//
@@ -65,6 +65,14 @@ public class AccountTest {
 		//
 		assertThrows("Amount must not be negative", IllegalArgumentException.class, () -> {
 			new Account(Balance.valueOf("100")).withdraw(Amount.valueOf("-100"));
+		});
+	}
+
+	@Test
+	public void should_throw_exception_when_withdraw_more_than_balance() {
+		//
+		assertThrows(UnauthorizedWithdrawalException.class, () -> {
+			new Account(Balance.valueOf("100")).withdraw(Amount.valueOf("200"));
 		});
 	}
 

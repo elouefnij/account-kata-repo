@@ -18,8 +18,12 @@ public class Account {
 		balance = balance.add(amount.value());
 	}
 
-	public void withdraw(Amount amount) {
-		balance = balance.subtract(amount.value());
+	public void withdraw(Amount amount) throws UnauthorizedWithdrawalException {
+		try {
+			balance = balance.subtract(amount.value());
+		} catch (IllegalArgumentException e) {
+			throw new UnauthorizedWithdrawalException(e.getMessage());
+		}
 	}
 
 }
