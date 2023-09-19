@@ -1,6 +1,7 @@
 package com.sfeir.bankaccount.business;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import java.math.BigDecimal;
 
@@ -25,4 +26,14 @@ public class AccountTest {
 		//
 		assertEquals(expectedBalance, account.balance());
 	}
+
+	@Test
+	public void should_throw_exception_when_new_account_is_created_with_negative_value() {
+		BigDecimal negative_value = BigDecimal.valueOf(-100.0);
+		//
+		assertThrows("Balance cannot be negative", IllegalArgumentException.class, () -> {
+			new Account(new Balance(negative_value));
+		});
+	}
+
 }
