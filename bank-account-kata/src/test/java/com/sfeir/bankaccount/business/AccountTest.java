@@ -10,10 +10,18 @@ public class AccountTest {
 
 	@Test
 	public void should_balance_be_zero_when_new_account_is_created() {
-		BigDecimal expectedBalance = BigDecimal.ZERO;
-		Account account;
+		Balance expectedBalance = new Balance(BigDecimal.ZERO);
 		//
-		account = new Account();
+		Account account = new Account();
+		//
+		assertEquals(expectedBalance, account.balance());
+	}
+
+	@Test
+	public void should_balance_be_updated_when_new_account_is_created_with_initial_value() {
+		Balance expectedBalance = new Balance(BigDecimal.TEN);
+		//
+		Account account = new Account(expectedBalance);
 		//
 		assertEquals(expectedBalance, account.balance());
 	}
