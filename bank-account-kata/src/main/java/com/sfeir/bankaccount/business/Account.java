@@ -18,4 +18,8 @@ public class Account {
 		balance = balance.add(amount.value());
 	}
 
+	public void withdraw(Amount amount) {
+		balance = balance.subtract(amount.value());
+	}
+
 }

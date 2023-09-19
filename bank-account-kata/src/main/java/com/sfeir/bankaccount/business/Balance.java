@@ -15,6 +15,10 @@ public record Balance(BigDecimal value) {
 		return new Balance(value.add(value_to_add));
 	}
 
+	public Balance subtract(BigDecimal value_to_substract) {
+		return new Balance(value.subtract(value_to_substract));
+	}
+
 	public static Balance valueOf(String value) {
 		return new Balance(new BigDecimal(value));
 	}

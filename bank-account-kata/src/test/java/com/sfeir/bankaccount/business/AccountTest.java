@@ -49,4 +49,15 @@ public class AccountTest {
 			new Account(Balance.valueOf("100")).deposit(Amount.valueOf("-100"));
 		});
 	}
+
+	@Test
+	public void should_balance_be_updated_when_withdrawal_of_positive_amount() {
+		Balance expectedBalance = Balance.valueOf("90");
+		Account account = new Account(Balance.valueOf("100"));
+		//
+		account.withdraw(Amount.valueOf("10"));
+		//
+		assertEquals(expectedBalance, account.balance());
+	}
+
 }
