@@ -53,4 +53,26 @@ public class StatementTest {
 		assertEquals(expected_sl.balance(), account.statement().lines().get(0).balance());
 		assertEquals(expected_sl.operation(), account.statement().lines().get(0).operation());
 	}
+
+	@Test
+	public void should_no_operation_be_added_when_rejected_withdrawal() throws UnauthorizedWithdrawalException {
+		//
+		Account account = new Account(date_supplier, Balance.valueOf("150"));
+		assertThrows(UnauthorizedWithdrawalException.class, () -> {
+			account.withdraw(Amount.valueOf("170"));
+		});
+		//
+		assertTrue(account.statement().lines().isEmpty());
+	}
+
+	@Test
+	public void should_no_operation_be_added_when_rejected_deposit() throws UnauthorizedWithdrawalException {
+		//
+		Account account = new Account(date_supplier, Balance.valueOf("150"));
+		//
+		assertThrows(IllegalArgumentException.class, () -> {
+			account.deposit(Amount.valueOf("-20"));
+		});
+		assertTrue(account.statement().lines().isEmpty());
+	}
 }
