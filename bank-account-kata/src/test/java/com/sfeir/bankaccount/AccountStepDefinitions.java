@@ -1,6 +1,7 @@
 package com.sfeir.bankaccount;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
 import com.sfeir.bankaccount.business.Account;
 import com.sfeir.bankaccount.business.Amount;
@@ -13,7 +14,8 @@ import io.cucumber.java.en.When;
 
 public class AccountStepDefinitions {
 	Account account;
-
+	Exception actualException;
+	
 	@Given("Client have an account with {string} balance")
 	public void client_have_an_account_with_balance(String balance) {
 		account = new Account(Balance.valueOf(balance));
@@ -29,13 +31,18 @@ public class AccountStepDefinitions {
 		Balance expected_balance = Balance.valueOf(balance);
 		assertEquals(expected_balance, account.balance());
 	}
+	
+	@Then("The error message {string} should be displayed")
+	public void the_error_message_should_be_displayed(String expectedMessage) {
+		assertEquals(expectedMessage, actualException.getMessage());
+	}
 
 	@When("Client makes a withdrawal of {string}")
 	public void client_makes_a_withdrawal_of(String amount) {
 		try {
 			account.withdraw(Amount.valueOf(amount));
 		} catch (UnauthorizedWithdrawalException e) {
-			e.printStackTrace();
+			actualException = e;
 		}
 	}
 

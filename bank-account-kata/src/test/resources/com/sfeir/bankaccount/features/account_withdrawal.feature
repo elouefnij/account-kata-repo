@@ -8,4 +8,9 @@ Feature: Account withdrawal
     Then The account balance shoud be "40.0"
       
 
-    
+ Scenario: As a bank client i cannot not retrieve more then my savings
+    Given Client have an account with "100.0" balance
+    And Client makes a withdrawal of "60.0"
+    When Client makes a withdrawal of "60.0"
+   	Then The error message "Unauthorized withdrawal : Balance must not be negative" should be displayed
+    And The account balance shoud be "40.0"
