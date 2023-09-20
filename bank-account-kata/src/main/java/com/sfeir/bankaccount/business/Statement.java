@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import com.sfeir.bankaccount.business.Operation.OperationType;
 
 public class Statement {
-	
+
 	private Supplier<LocalDateTime> dateSupplier;
 	private List<StatementLine> lines = new ArrayList<StatementLine>();
 

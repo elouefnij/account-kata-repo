@@ -27,52 +27,69 @@ public class StatementTest {
 	@Test
 	public void should_new_operation_be_added_when_deposit() {
 		//
-		StatementLine expected_sl = new StatementLine(
-				new Operation(OperationType.DEPOSIT, date_supplier.get(), Amount.valueOf("100")),
-				Balance.valueOf("100"));
-		//
 		Account account = new Account(date_supplier);
+		//
 		account.deposit(Amount.valueOf("100"));
 		//
-		assertNotNull(account.statement().lines().get(0));
-		assertEquals(expected_sl.balance(), account.statement().lines().get(0).balance());
-		assertEquals(expected_sl.operation(), account.statement().lines().get(0).operation());
+		assertStatementLine(0, OperationType.DEPOSIT, date_supplier.get(), "100", "100", account);
 	}
 
 	@Test
 	public void should_new_operation_be_added_when_withdrawal() throws UnauthorizedWithdrawalException {
-		//
-		StatementLine expected_sl = new StatementLine(
-				new Operation(OperationType.WITHDRAWAL, date_supplier.get(), Amount.valueOf("20")),
-				Balance.valueOf("130"));
-		//
 		Account account = new Account(date_supplier, Balance.valueOf("150"));
+		//
 		account.withdraw(Amount.valueOf("20"));
 		//
-		assertNotNull(account.statement().lines().get(0));
-		assertEquals(expected_sl.balance(), account.statement().lines().get(0).balance());
-		assertEquals(expected_sl.operation(), account.statement().lines().get(0).operation());
+		assertStatementLine(1, OperationType.WITHDRAWAL, date_supplier.get(), "20", "130", account);
 	}
 
 	@Test
-	public void should_no_operation_be_added_when_rejected_withdrawal() throws UnauthorizedWithdrawalException {
+	public void should_no_operation_be_added_when_rejected_withdrawal() {
+		var account = new Account(date_supplier, Balance.valueOf("150"));
 		//
-		Account account = new Account(date_supplier, Balance.valueOf("150"));
 		assertThrows(UnauthorizedWithdrawalException.class, () -> {
-			account.withdraw(Amount.valueOf("170"));
+			new Account(date_supplier, Balance.valueOf("150")).withdraw(Amount.valueOf("170"));
 		});
 		//
-		assertTrue(account.statement().lines().isEmpty());
+		assertStatementLinesNumber(1, account);
 	}
 
 	@Test
-	public void should_no_operation_be_added_when_rejected_deposit() throws UnauthorizedWithdrawalException {
+	public void should_no_operation_be_added_when_rejected_deposit() {
 		//
-		Account account = new Account(date_supplier, Balance.valueOf("150"));
+		Account account = new Account(date_supplier);
 		//
 		assertThrows(IllegalArgumentException.class, () -> {
 			account.deposit(Amount.valueOf("-20"));
 		});
 		assertTrue(account.statement().lines().isEmpty());
 	}
+
+	@Test
+	public void should_all_operations_be_added_when_multiple_transactions() throws UnauthorizedWithdrawalException {
+		Account account = new Account(date_supplier, Balance.valueOf("150")).withdraw(Amount.valueOf("20"))
+				.deposit(Amount.valueOf("200")).deposit(Amount.valueOf("200"));
+		//
+		assertStatementLinesNumber(4, account);
+		assertStatementLine(3, OperationType.DEPOSIT, date_supplier.get(), "200", "530", account);
+
+	}
+
+	private void assertStatementLinesNumber(int expectedSize, Account account) {
+		assertEquals(expectedSize, account.statement().lines().size());
+	}
+
+	private void assertStatementLine(int expectedPosition, OperationType expectedOperationType,
+			LocalDateTime expectedDate, String expectedOperationAmount, String expectedBalance, Account account) {
+		//
+		StatementLine expected_statement_line = new StatementLine(
+				new Operation(expectedOperationType, expectedDate, Amount.valueOf(expectedOperationAmount)),
+				Balance.valueOf(expectedBalance));
+		//
+		assertNotNull(account.statement().lines().get(expectedPosition));
+		assertEquals(expected_statement_line.balance(), account.statement().lines().get(expectedPosition).balance());
+		assertEquals(expected_statement_line.operation(),
+				account.statement().lines().get(expectedPosition).operation());
+	}
+
 }

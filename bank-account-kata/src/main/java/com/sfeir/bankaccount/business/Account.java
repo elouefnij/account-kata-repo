@@ -14,24 +14,27 @@ public class Account {
 	public Account(Supplier<LocalDateTime> date_supplier, Balance balance) {
 		this(date_supplier);
 		this.balance = balance;
+		statement.deposit(new Amount(balance.value()), balance);
 	}
 
-	public Balance balance() {
-		return this.balance;
-	}
-
-	public void deposit(Amount amount) {
-		balance = balance.add(amount.value());
+	public Account deposit(Amount amount) {
+		this.balance = balance().add(amount.value());
 		statement.deposit(amount, balance);
+		return this;
 	}
 
-	public void withdraw(Amount amount) throws UnauthorizedWithdrawalException {
+	public Account withdraw(Amount amount) throws UnauthorizedWithdrawalException {
 		try {
-			balance = balance.subtract(amount.value());
+			this.balance = balance().subtract(amount.value());
 			statement.withdrawal(amount, balance);
 		} catch (IllegalArgumentException e) {
 			throw new UnauthorizedWithdrawalException(e.getMessage());
 		}
+		return this;
+	}
+
+	public Balance balance() {
+		return this.balance;
 	}
 
 	public Statement statement() {
