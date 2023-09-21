@@ -24,6 +24,10 @@ public class Statement {
 		lines.add(new StatementLine(new Operation(OperationType.WITHDRAWAL, dateSupplier.get(), amount), balance));
 	}
 
+	public String print(StatementPrinter printer) {
+		return printer.print(this);
+	}
+
 	public List<StatementLine> lines() {
 		return lines;
 	}

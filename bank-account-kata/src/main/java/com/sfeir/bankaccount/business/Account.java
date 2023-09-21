@@ -7,12 +7,16 @@ public class Account {
 	private Balance balance = Balance.INITIAL_BALANCE;
 	private Statement statement;
 
-	public Account(Supplier<LocalDateTime> date_supplier) {
-		this.statement = new Statement(date_supplier);
+	public Account(Supplier<LocalDateTime> dateSupplier) {
+		this.statement = new Statement(dateSupplier);
 	}
 
-	public Account(Supplier<LocalDateTime> date_supplier, Balance balance) {
-		this(date_supplier);
+	public Account(Supplier<LocalDateTime> dateSupplier, Balance balance) {
+		this(dateSupplier);
+		initializeAccount(balance);
+	}
+
+	private void initializeAccount(Balance balance) {
 		this.balance = balance;
 		statement.deposit(new Amount(balance.value()), balance);
 	}

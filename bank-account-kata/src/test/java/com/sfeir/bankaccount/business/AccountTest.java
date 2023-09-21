@@ -3,14 +3,21 @@ package com.sfeir.bankaccount.business;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class AccountTest {
-	Supplier<LocalDateTime> dateSupplier = () -> {return LocalDateTime.now();};
+	Supplier<LocalDateTime> dateSupplier;
+
+	@Before
+	public void setup() {
+		dateSupplier = () -> {
+			return LocalDateTime.of(2023, 9, 01, 10, 00);
+		};
+	}
 
 	@Test
 	public void should_balance_be_zero_when_new_account_is_created() {

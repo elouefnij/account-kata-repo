@@ -9,17 +9,27 @@ import com.sfeir.bankaccount.business.Account;
 import com.sfeir.bankaccount.business.Amount;
 import com.sfeir.bankaccount.business.Balance;
 import com.sfeir.bankaccount.business.UnauthorizedWithdrawalException;
+import com.sfeir.bankaccount.infrastructure.ConsoleStatementPrinter;
 
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class AccountStepDefinitions {
-	Account account;
-	Exception actualException;
-	Supplier<LocalDateTime> dateSupplier = () -> {
-		return LocalDateTime.now();
-	};
+
+	private Supplier<LocalDateTime> dateSupplier;
+	private Account account;
+	private Exception actualException;
+	private String printedStatement;
+
+	@Before
+	public void setup() {
+		dateSupplier = () -> {
+			return LocalDateTime.of(2023, 9, 01, 10, 00);
+		};
+	}
 
 	@Given("Client have an account with {string} balance")
 	public void client_have_an_account_with_balance(String balance) {
@@ -33,8 +43,8 @@ public class AccountStepDefinitions {
 
 	@Then("The account balance shoud be {string}")
 	public void the_account_balance_shoud_be(String balance) {
-		Balance expected_balance = Balance.valueOf(balance);
-		assertEquals(expected_balance, account.balance());
+		Balance expectedBalance = Balance.valueOf(balance);
+		assertEquals(expectedBalance, account.balance());
 	}
 
 	@Then("The error message {string} should be displayed")
@@ -53,20 +63,12 @@ public class AccountStepDefinitions {
 
 	@When("Client checks operations")
 	public void client_checks_operations() {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+		printedStatement = account.statement().print(new ConsoleStatementPrinter());
 	}
 
-	@Then("The account statement should be shown")
-	public void the_account_statement_should_be_shown(io.cucumber.datatable.DataTable dataTable) {
-		// Write code here that turns the phrase above into concrete actions
-		// For automatic transformation, change DataTable to one of
-		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		// Double, Byte, Short, Long, BigInteger or BigDecimal.
-		//
-		// For other transformations you can register a DataTableType.
-		throw new io.cucumber.java.PendingException();
+	@Then("The account statement should be printed")
+	public void the_account_statement_should_be_printed(DataTable dataTable) {
+		assertEquals(dataTable.toString().replaceAll("\s", ""), printedStatement.replaceAll("\s", ""));
 	}
 
 }

@@ -1,5 +1,5 @@
 package com.sfeir.bankaccount.business;
 
 public interface StatementPrinter {
-	void print();
+	public String print(Statement statement);
 }

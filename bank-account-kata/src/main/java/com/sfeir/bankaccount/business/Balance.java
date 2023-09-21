@@ -11,12 +11,12 @@ public record Balance(BigDecimal value) {
 			throw new IllegalArgumentException("Balance must not be negative");
 	}
 
-	public Balance add(BigDecimal value_to_add) {
-		return new Balance(value.add(value_to_add));
+	public Balance add(BigDecimal value) {
+		return new Balance(this.value.add(value));
 	}
 
-	public Balance subtract(BigDecimal value_to_substract) {
-		return new Balance(value.subtract(value_to_substract));
+	public Balance subtract(BigDecimal value) {
+		return new Balance(this.value.subtract(value));
 	}
 
 	public static Balance valueOf(String value) {
